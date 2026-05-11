@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
 import logger from './utils/logger';
 import morgan from 'morgan';
+import aduanRouter from './router/aduan.router';
 // import dotenv from 'dotenv';
 
 // Load environment variables from .env
@@ -31,7 +32,10 @@ app.use(
   })
 );
 
+app.use(express.json());
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/aduan', aduanRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello world');
