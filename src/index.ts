@@ -5,21 +5,21 @@ import { swaggerSpec } from './swagger';
 import logger from './utils/logger';
 import morgan from 'morgan';
 import aduanRouter from './router/aduan.router';
-import db from './database/db';
+// import db from './database/db';
 // import dotenv from 'dotenv';
 
 // Load environment variables from .env
 // dotenv.config();
 
 // check database connection on startup
-db.raw('SELECT 1')
-  .then(() => {
-    console.log('Database connection established');
-  })
-  .catch((err) => {
-    console.error('Unable to connect to the database:', err);
-    process.exit(1); // Exit with failure code
-  });
+// db.raw('SELECT 1')
+//   .then(() => {
+//     console.log('Database connection established');
+//   })
+//   .catch((err) => {
+//     console.error('Unable to connect to the database:', err);
+//     process.exit(1); // Exit with failure code
+//   });
 
 const app = express();
 // Use the variable from process.env, or a default fallback

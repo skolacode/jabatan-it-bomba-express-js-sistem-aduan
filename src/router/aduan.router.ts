@@ -8,27 +8,61 @@ interface Aduan {
 }
 
 const router = Router();
-const aduans = new Map<string, Aduan>();
+
+const aduans = new Map();
+aduans.set('1', {
+  nama_pengadu: 'John Doe',
+  catatan: 'Catatan aduan 1',
+  kategori_aduan: 'Kategori 1',
+  email: 'john.doe@example.com',
+});
+aduans.set('2', {
+  nama_pengadu: 'Jane Doe',
+  catatan: 'Catatan aduan 2',
+  kategori_aduan: 'Kategori 2',
+  email: 'jane.doe@example.com',
+});
 
 const getRouteId = (req: Request): string | null => {
   const id = req.params.id;
   return typeof id === 'string' && id.trim() !== '' ? id : null;
 };
 
-router.post('/create', (req: Request, res: Response) => {
-  const { title, description } = req.body as Partial<Aduan>;
+router.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    data: Array.from(aduans.values()),
+  });
+});
 
-  if (!title || !description) {
+router.post('/create', (req, res) => {
+  // body params
+  /**
+   * 1. Nama Pengadu
+   * 2. catatan
+   * 3. categori aduan
+   * 4. email
+   *
+   * // validasi - DONE
+   */
+
+  const { nama_pengadu, catatan, kategori_aduan, email } = req.body;
+
+  // validation / validasi
+  if (!nama_pengadu || !catatan || !kategori_aduan || !email) {
     return res.status(400).json({
-      message: 'Both title and description are required.',
+      message:
+        'All fields (nama_pengadu, catatan, kategori_aduan, email) are required.',
     });
   }
 
-  const id = String(Date.now());
-  const aduan: Aduan = { id, title, description };
-  aduans.set(id, aduan);
+  const id = String(Date.now()); // - create a unique id, we are using date, but we will change to uuid
+  const aduan = { nama_pengadu, catatan, kategori_aduan, email };
+  aduans.set(id, aduan); // -- add new record
 
-  return res.status(201).json({ message: 'Aduan created.', data: aduan });
+  return res
+    .status(201)
+    .json({ message: 'Aduan created.', data: { id: id, ...aduan } });
 });
 
 router.get('/view/:id', (req: Request, res: Response) => {
